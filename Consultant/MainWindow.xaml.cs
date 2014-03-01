@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using Xceed.Wpf.Toolkit;
 
 using System.Data;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace WpfApplication1
 {
@@ -132,11 +134,52 @@ namespace WpfApplication1
                     dataAdapter.Fill(ds);
                 }
 
+       
                 DataView dv = ds.Tables[0].DefaultView;
 
-                dataGrid.ItemsSource = dv;
+                DataTable dt = new DataTable();
+                dt.Columns.Add(new DataColumn("Day", typeof(int)));
+                dt.Columns.Add(new DataColumn("Times", typeof(string)));
+                dt.Columns.Add(new DataColumn("Description", typeof(string)));
+
+                OrderedDictionary dtIndex = new OrderedDictionary();
+                dtIndex.Clear();
+              
+                for (int i = 0; i < ds.Tables[0].Columns.Count; i++)
+                {
+                    dtIndex.Add(ds.Tables[0].Columns[i].ColumnName, i); 
+                }
+
+                foreach (DataRow r in ds.Tables[0].Rows)
+                {
+
+                    var id = r[(int)dtIndex["id"]];
+                    var project_id = r[(int)dtIndex["project_id"]];
+                    DateTime start_date = (DateTime)r[(int)dtIndex["start_date"]];
+                    DateTime end_date =(DateTime)r[(int)dtIndex["end_date"]];
+                    var desc = r[(int)dtIndex["description"]];
+
+                //    dt.Columns["colStatus"].Expression = String.Format("IIF(colBestBefore < #{0}#, 'Ok','Not ok')", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    //datetime.ToString("dd")
+                    dt.Rows.Add(start_date.ToString("dd"), start_date.ToString("h:mm tt") + " - " + end_date.ToString("h:mm tt"), desc);
+                }
+              
+                //dv.Sort(dv.Table.Columns[0], ListSortDirection.Ascending);
+
+            /*   
+            dt.Rows.Add(DateTime.Now.AddDays(1));
+                dt.Rows.Add(DateTime.Now.AddDays(2));
+                dt.Rows.Add(DateTime.Now.AddDays(-2));
+            */
 
 
+                
+//                dataGrid.ItemsSource = dv;
+                DataView dvdt = dt.DefaultView;
+                dvdt.Sort = "Day ASC";
+                dataGrid.ItemsSource = dvdt;
+
+                
                 
 
               //  MessageBox.Show("test");
