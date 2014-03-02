@@ -138,9 +138,18 @@ namespace WpfApplication1
                 DataView dv = ds.Tables[0].DefaultView;
 
                 DataTable dt = new DataTable();
+                dt.Columns.Add(new DataColumn("Link", typeof(DataRow)));
+                dt.Columns.Add(new DataColumn("Readable", typeof(string)));
                 dt.Columns.Add(new DataColumn("Day", typeof(int)));
                 dt.Columns.Add(new DataColumn("Times", typeof(string)));
+                dt.Columns.Add(new DataColumn("Duration", typeof(string)));
                 dt.Columns.Add(new DataColumn("Description", typeof(string)));
+
+                
+                
+               // dt.Columns[0].Visible = false;
+           
+
 
                 OrderedDictionary dtIndex = new OrderedDictionary();
                 dtIndex.Clear();
@@ -159,44 +168,57 @@ namespace WpfApplication1
                     DateTime end_date =(DateTime)r[(int)dtIndex["end_date"]];
                     var desc = r[(int)dtIndex["description"]];
 
-                //    dt.Columns["colStatus"].Expression = String.Format("IIF(colBestBefore < #{0}#, 'Ok','Not ok')", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    //datetime.ToString("dd")
-                    dt.Rows.Add(start_date.ToString("dd"), start_date.ToString("h:mm tt") + " - " + end_date.ToString("h:mm tt"), desc);
+                    TimeSpan diff = end_date-start_date;
+                    String diffTime = diff.Hours.ToString() + " Hrs " + diff.Minutes.ToString() + "Mins";
+                    String readable = Ordinal(Convert.ToInt32(start_date.ToString("dd"))) + " " + start_date.ToString("dddd");
+
+                    dt.Rows.Add(r,readable,start_date.ToString("dd"), start_date.ToString("h:mm tt") + " - " + end_date.ToString("h:mm tt"), diffTime, desc);
                 }
-              
-                //dv.Sort(dv.Table.Columns[0], ListSortDirection.Ascending);
+                             
 
-            /*   
-            dt.Rows.Add(DateTime.Now.AddDays(1));
-                dt.Rows.Add(DateTime.Now.AddDays(2));
-                dt.Rows.Add(DateTime.Now.AddDays(-2));
-            */
-
-
-                
-//                dataGrid.ItemsSource = dv;
                 DataView dvdt = dt.DefaultView;
                 dvdt.Sort = "Day ASC";
-                dataGrid.ItemsSource = dvdt;
-
                 
-                
+                ICollectionView iG = CollectionViewSource.GetDefaultView(dvdt);
+                iG.GroupDescriptions.Add(new PropertyGroupDescription("Day"));
+                dataGrid.ItemsSource = iG;
 
-              //  MessageBox.Show("test");
-                /*
-                Dictionary<string, string> DictValues = new Dictionary<string, string>();
-
-                for (int i = 0; i <= ds.Tables[0].Rows[0].ItemArray.Length - 1; i++)
-                {
-                    MessageBox.Show(ds.Tables[0].Rows[0].ItemArray[i] + " -- " + ds.Tables[0].Rows[0].Table.Columns[i]);
-                    DictValues.Add(ds.Tables[0].Rows[0].Table.Columns[i].ToString(), ds.Tables[0].Rows[0].ItemArray[i].ToString());
-                }
-                 */
-
-           
         }
 
-        
+        public static string Ordinal(int number)
+        {
+            string suffix = String.Empty;
+
+            int ones = number % 10;
+            int tens = (int)Math.Floor(number / 10M) % 10;
+
+            if (tens == 1)
+            {
+                suffix = "th";
+            }
+            else
+            {
+                switch (ones)
+                {
+                    case 1:
+                        suffix = "st";
+                        break;
+
+                    case 2:
+                        suffix = "nd";
+                        break;
+
+                    case 3:
+                        suffix = "rd";
+                        break;
+
+                    default:
+                        suffix = "th";
+                        break;
+                }
+            }
+            return String.Format("{0}{1}", number, suffix);
+        }
 
         static private string GetConnectionString()
         {
@@ -345,6 +367,10 @@ namespace WpfApplication1
 
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            
+            //int rowIndex = e.RowIndex;
+            System.Data.DataRowView row = (System.Data.DataRowView)dataGrid.CurrentItem;
+           
             FillEdit();
             tabControl.SelectedItem = edit_tab;
         }
@@ -356,10 +382,11 @@ namespace WpfApplication1
             if (dataGrid.SelectedItem == null)
                 return;
             DataRowView dr = ((DataRowView)dataGrid.SelectedItem);
-            
-            DateTime startDate = (DateTime)dr.Row["start_date"];
-            DateTime endDate = (DateTime)dr.Row["end_date"];
-            String des = (String)dr.Row["description"];
+            DataRow drow = (DataRow)dr.Row[0];
+
+            DateTime startDate = (DateTime)drow["start_date"];
+            DateTime endDate = (DateTime)drow["end_date"];
+            String des = (String)drow["description"];
 
             //Extract timespan
             TimeSpan sstartTime = startDate.TimeOfDay;
@@ -370,7 +397,7 @@ namespace WpfApplication1
             edit_endTime.Value = endDate;
             edit_description.Text = des;
 
-            ID.Content = dr.Row["id"];
+            ID.Content = drow["id"];
 
         }
 

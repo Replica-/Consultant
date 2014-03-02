@@ -209,7 +209,50 @@
         
     </Window.Resources>
     <Canvas Height="500" Name="canvas1" Width="959">
-        <DataGrid Name="dataGrid" AutoGenerateColumns="true" Canvas.Left="12" Canvas.Top="164" Height="324" Width="599" ItemsSource="{Binding}" SelectionChanged="dataGrid_SelectionChanged" IsReadOnly="True" />
+        <DataGrid Name="dataGrid" AutoGenerateColumns="false" Canvas.Left="12" Canvas.Top="164" Height="324" Width="599"  SelectionChanged="dataGrid_SelectionChanged" IsReadOnly="True" >
+            <DataGrid.Columns>
+                <!--<DataGridTextColumn  Header="Day" Width="SizeToCells" Binding="{Binding Day}" IsReadOnly="True"/>-->
+                <DataGridTextColumn  Header="Times" Width="SizeToCells" Binding="{Binding Times}" IsReadOnly="True"/>
+                <DataGridTextColumn  Header="Duration" Width="SizeToCells" Binding="{Binding Duration}" IsReadOnly="True"/>
+                <DataGridTextColumn  Header="Description" Width="SizeToCells" Binding="{Binding Description}" IsReadOnly="True"/>
+                   
+                
+            </DataGrid.Columns>
+
+
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Path=Items[0].Readable}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander IsExpanded="True">
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                             
+
+                                                    <TextBlock Text="{Binding Path=Items[0].Readable}" />
+
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <ItemsPresenter />
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+        </DataGrid>
         <DataGrid Name="dataGrid_projects" AutoGenerateColumns="true" Canvas.Left="12" Canvas.Top="12" Height="131" Width="599" ItemsSource="{Binding}" SelectionChanged="dataGrid_projects_SelectionChanged" IsReadOnly="True" />
         <Calendar DisplayModeChanged="Calendar_DisplayModeChanged"   Canvas.Left="671" Canvas.Top="0" Height="173" Name="calendar1" Width="276"  SelectedDatesChanged="calendar1_SelectedDatesChanged" DisplayMode="Year" />
         <TabControl Canvas.Left="630" Canvas.Top="164" Height="324" Name="tabControl" Width="329">
