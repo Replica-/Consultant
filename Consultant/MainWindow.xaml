@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Title="MainWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Loaded="Window_Loaded_1" d:DesignHeight="636" d:DesignWidth="1052" SizeToContent="WidthAndHeight">
+        Title="Consultant" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Loaded="Window_Loaded_1" d:DesignHeight="732" d:DesignWidth="881" SizeToContent="WidthAndHeight">
     <Window.Resources>
         <!--Style for the days of a month.-->
        <!-- <Style x:Key="theCalendar"  TargetType="CalendarItem">
@@ -208,109 +208,111 @@
 
         
     </Window.Resources>
-    <Canvas Height="500" Name="canvas1" Width="959">
-        <DataGrid Name="dataGrid" AutoGenerateColumns="false" Canvas.Left="12" Canvas.Top="164" Height="324" Width="599"  SelectionChanged="dataGrid_SelectionChanged" IsReadOnly="True" >
-            <DataGrid.Columns>
-                <!--<DataGridTextColumn  Header="Day" Width="SizeToCells" Binding="{Binding Day}" IsReadOnly="True"/>-->
-                <DataGridTextColumn  Header="Times" Width="SizeToCells" Binding="{Binding Times}" IsReadOnly="True"/>
-                <DataGridTextColumn  Header="Duration" Width="SizeToCells" Binding="{Binding Duration}" IsReadOnly="True"/>
-                <DataGridTextColumn  Header="Description" Width="SizeToCells" Binding="{Binding Description}" IsReadOnly="True"/>
-                   
-                
-            </DataGrid.Columns>
-
-
-            <DataGrid.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding Path=Items[0].Readable}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                    <GroupStyle.ContainerStyle>
-                        <Style TargetType="{x:Type GroupItem}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type GroupItem}">
-                                        <Expander IsExpanded="True">
-                                            <Expander.Header>
-                                                <StackPanel Orientation="Horizontal">
-                                             
-
-                                                    <TextBlock Text="{Binding Path=Items[0].Readable}" />
-
-                                                </StackPanel>
-                                            </Expander.Header>
-                                            <ItemsPresenter />
-                                        </Expander>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </GroupStyle.ContainerStyle>
-                </GroupStyle>
-            </DataGrid.GroupStyle>
-        </DataGrid>
-        <DataGrid Name="dataGrid_projects" AutoGenerateColumns="true" Canvas.Left="12" Canvas.Top="12" Height="131" Width="599" ItemsSource="{Binding}" SelectionChanged="dataGrid_projects_SelectionChanged" IsReadOnly="True" />
-        <Calendar DisplayModeChanged="Calendar_DisplayModeChanged"   Canvas.Left="671" Canvas.Top="0" Height="173" Name="calendar1" Width="276"  SelectedDatesChanged="calendar1_SelectedDatesChanged" DisplayMode="Year" />
-        <TabControl Canvas.Left="630" Canvas.Top="164" Height="324" Name="tabControl" Width="329">
-            <TabItem Header="Add" Name="add_tab">
-                <Grid Width="329" Height="275">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30*" />
-                        <RowDefinition Height="30*" />
-                        <RowDefinition Height="30*" />
-                        <RowDefinition Height="30*" />
-                        <RowDefinition Height="150*" />
-                        <RowDefinition Height="30*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="101" />
-                        <ColumnDefinition Width="355*" />
-                    </Grid.ColumnDefinitions>
-                    <DatePicker Height="25" Name="datePicker_start" Width="115" Grid.Column="1" Grid.Row="1" Margin="0,-1,113,2" />
-                    <Label Content="Description" Height="28" Name="label1" Grid.Row="4" />
-                    <xctk:TimePicker Height="23" Name="endTime" Width="120" Grid.Row="3" Grid.Column="1" Margin="0,6,108,0" />
-                    <xctk:TimePicker Height="23" Name="startTime" Width="120" Grid.Row="2" Grid.Column="1" Margin="0,6,108,0" />
-                    <Label Content="Start Time" Height="28" Name="label6" Grid.Row="2" Margin="0,4,0,0" />
-                    <Label Content="End Time" Height="28" Name="label7" Grid.Row="2" Margin="0,31,0,4" Grid.RowSpan="2" />
-                    <Button Content="Add" Height="23" Name="button3" Width="75" Click="add_Click" Grid.Row="5" Grid.Column="1" Margin="148,7,6,-2" />
-                    <TextBox Name="description" Grid.Row="4" Grid.Column="1" Margin="0,20,0,0" HorizontalAlignment="Left" Width="212" />
-                    <Label Content="New" Height="28" Name="lbl" VerticalAlignment="Top" />
-                    <Label Content="Day" Height="28" Grid.Row="1" />
-                </Grid>
-            </TabItem>
-            <TabItem Header="Edit" Name="edit_tab">
-                <Grid Width="329" Height="275">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30*" />
-                        <RowDefinition Height="30*" />
-                        <RowDefinition Height="30*" />
-                        <RowDefinition Height="30*" />
-                        <RowDefinition Height="150*" />
-                        <RowDefinition Height="30*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="101" />
-                        <ColumnDefinition Width="355*" />
-                    </Grid.ColumnDefinitions>
-                    <DatePicker Height="25" Name="edit_datePicker_start" Width="115" Grid.Column="1" Grid.Row="1" Margin="0,-1,113,2" />
-                    <Label Content="Description" Height="28" Name="edit_label1" Grid.Row="4" />
-                    <xctk:TimePicker Height="23" Name="edit_endTime" Width="120" Grid.Row="3" Grid.Column="1" Margin="0,6,108,0" />
-                    <xctk:TimePicker Height="23" Name="edit_startTime" Width="120" Grid.Row="2" Grid.Column="1" Margin="0,6,108,0" />
-                    <Label Content="Start Time" Height="28" Name="edit_label6" Grid.Row="2" Margin="0,4,0,0" />
-                    <Label Content="End Time" Height="28" Name="edit_label7" Grid.Row="2" Margin="0,31,0,4" Grid.RowSpan="2" />
-                    <Button Content="Apply" Height="23" Name="edit_button3" Width="75" Grid.Row="5" Grid.Column="1" Margin="148,7,6,-2" Click="edit_Click" />
-                    <TextBox Name="edit_description" Grid.Row="4" Grid.Column="1" Margin="0,20,0,0" HorizontalAlignment="Left" Width="212" />
-                    <Label Content="New" Height="28" Name="ID" VerticalAlignment="Top" />
-                    <Label Content="Day" Height="28" Name="label2" Grid.Row="1" />
-                </Grid>
-            </TabItem>
-
-        </TabControl>
-      
+    <Canvas Height="691" Name="canvas1" Width="817">
+        <DataGrid Name="dataGrid_projects" AutoGenerateColumns="true" Canvas.Left="18" Canvas.Top="35" Height="167" Width="594" ItemsSource="{Binding}" SelectionChanged="dataGrid_projects_SelectionChanged" IsReadOnly="True" />
+        <Calendar DisplayModeChanged="Calendar_DisplayModeChanged"   Canvas.Left="618" Canvas.Top="35" Height="167" Name="calendar1" Width="180"  SelectedDatesChanged="calendar1_SelectedDatesChanged" DisplayMode="Year" />
+        <Menu Canvas.Left="0" Canvas.Top="0" Height="23" Name="menu1" Width="817">
+            <MenuItem Header="Project" Click="MenuItem_Click">
+                <MenuItem Header="Open Project"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <GroupBox Canvas.Left="12" Canvas.Top="208" Header="Sumo Visual Group - March" Height="471" Name="groupBox1" Width="793">
+            <Grid Width="780">
+                <DataGrid Name="dataGrid" AutoGenerateColumns="false" SelectionChanged="dataGrid_SelectionChanged" IsReadOnly="True" Margin="6,13,387,48">
+                    <DataGrid.Columns>
+                        <!--<DataGridTextColumn  Header="Day" Width="SizeToCells" Binding="{Binding Day}" IsReadOnly="True"/>-->
+                        <DataGridTextColumn Header="Times" Width="SizeToCells" Binding="{Binding Times}" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Duration" Width="SizeToCells" Binding="{Binding Duration}" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Description" Width="SizeToCells" Binding="{Binding Description}" IsReadOnly="True" />
+                    </DataGrid.Columns>
+                    <DataGrid.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Path=Items[0].Readable}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="{x:Type GroupItem}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                <Expander IsExpanded="True">
+                                                    <Expander.Header>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Path=Items[0].Readable}" />
+                                                        </StackPanel>
+                                                    </Expander.Header>
+                                                    <ItemsPresenter />
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                    </DataGrid.GroupStyle>
+                </DataGrid>
+                <TabControl Name="tabControl" Margin="420,17,26,63">
+                    <TabItem Header="Add" Name="add_tab">
+                        <Grid Width="329" Height="286">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30*" />
+                                <RowDefinition Height="30*" />
+                                <RowDefinition Height="30*" />
+                                <RowDefinition Height="30*" />
+                                <RowDefinition Height="150*" />
+                                <RowDefinition Height="30*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="101" />
+                                <ColumnDefinition Width="355*" />
+                            </Grid.ColumnDefinitions>
+                            <DatePicker Height="25" Name="datePicker_start" Width="115" Grid.Column="1" Grid.Row="1" Margin="0,-1,113,2" />
+                            <Label Content="Description" Height="28" Name="label1" Grid.Row="4" />
+                            <xctk:TimePicker Height="23" Name="endTime" Width="120" Grid.Row="3" Grid.Column="1" Margin="0,6,108,0" />
+                            <xctk:TimePicker Height="23" Name="startTime" Width="120" Grid.Row="2" Grid.Column="1" Margin="0,6,108,0" />
+                            <Label Content="Start Time" Height="28" Name="label6" Grid.Row="2" Margin="0,4,0,0" />
+                            <Label Content="End Time" Height="28" Name="label7" Grid.Row="2" Margin="0,31,0,4" Grid.RowSpan="2" />
+                            <Button Content="Add" Height="23" Name="button3" Width="75" Click="add_Click" Grid.Row="5" Grid.Column="1" Margin="136,6,17,0" />
+                            <TextBox Name="description" Grid.Row="4" Grid.Column="1" Margin="0,20,0,0" HorizontalAlignment="Left" Width="212" />
+                            <Label Content="New" Height="28" Name="lbl" VerticalAlignment="Top" />
+                            <Label Content="Day" Height="28" Grid.Row="1" />
+                            <Rectangle Height="436" Name="rectangle1" Stroke="Black" Width="752" Grid.ColumnSpan="2" Margin="-414,-40,-9,-110" Grid.RowSpan="6" />
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Edit" Name="edit_tab">
+                        <Grid Width="329" Height="275">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30*" />
+                                <RowDefinition Height="30*" />
+                                <RowDefinition Height="30*" />
+                                <RowDefinition Height="30*" />
+                                <RowDefinition Height="150*" />
+                                <RowDefinition Height="30*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="101" />
+                                <ColumnDefinition Width="355*" />
+                            </Grid.ColumnDefinitions>
+                            <DatePicker Height="25" Name="edit_datePicker_start" Width="115" Grid.Column="1" Grid.Row="1" Margin="0,-1,113,2" />
+                            <Label Content="Description" Height="28" Name="edit_label1" Grid.Row="4" />
+                            <xctk:TimePicker Height="23" Name="edit_endTime" Width="120" Grid.Row="3" Grid.Column="1" Margin="0,6,108,0" />
+                            <xctk:TimePicker Height="23" Name="edit_startTime" Width="120" Grid.Row="2" Grid.Column="1" Margin="0,6,108,0" />
+                            <Label Content="Start Time" Height="28" Name="edit_label6" Grid.Row="2" Margin="0,4,0,0" />
+                            <Label Content="End Time" Height="28" Name="edit_label7" Grid.Row="2" Margin="0,31,0,4" Grid.RowSpan="2" />
+                            <Button Content="Apply" Height="23" Name="edit_button3" Width="75" Grid.Row="5" Grid.Column="1" Margin="148,7,6,-2" Click="edit_Click" />
+                            <TextBox Name="edit_description" Grid.Row="4" Grid.Column="1" Margin="0,20,0,0" HorizontalAlignment="Left" Width="212" />
+                            <Label Content="New" Height="28" Name="ID" VerticalAlignment="Top" />
+                            <Label Content="Day" Height="28" Name="label2" Grid.Row="1" />
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                <Label Content="" Height="28" Name="HrsLabel" Width="209" Margin="6,414,565,6" />
+            </Grid>
+        </GroupBox>
     </Canvas>
 
 

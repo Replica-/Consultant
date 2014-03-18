@@ -120,14 +120,14 @@ namespace WpfApplication1
             }
 
             var startOfMonth = new DateTime(theMonthToFilter.Year, theMonthToFilter.Month, 1);
-            var endOfMonth = new DateTime(theMonthToFilter.Year, theMonthToFilter.Month, 1).AddMonths(1).AddDays(-1); ;
+            var endOfMonth = new DateTime(theMonthToFilter.Year, theMonthToFilter.Month, 1).AddMonths(1).AddDays(-1).AddHours(23).AddMinutes(59); ;
 
             //calendar1.SelectedDate;
                 DataRowView dr = ((DataRowView)dataGrid_projects.SelectedItem);
 
             if (dr==null) return;
 
-                String SQL = "SELECT * FROM times WHERE project_id = '" + dr.Row[0] + "' AND julianday(start_date) > julianday('" + DateTimeSQLite(startOfMonth) + "') AND julianday(end_date) < julianday('" + DateTimeSQLite(endOfMonth) + "')";
+                String SQL = "SELECT * FROM times WHERE project_id = '" + dr.Row[0] + "' AND julianday(start_date) >= julianday('" + DateTimeSQLite(startOfMonth) + "') AND julianday(end_date) <= julianday('" + DateTimeSQLite(endOfMonth) + "')";
                 DataSet ds = new DataSet();
                 using (SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(SQL, cnn))
                 {
@@ -159,6 +159,7 @@ namespace WpfApplication1
                     dtIndex.Add(ds.Tables[0].Columns[i].ColumnName, i); 
                 }
 
+                TimeSpan total = new TimeSpan();
                 foreach (DataRow r in ds.Tables[0].Rows)
                 {
 
@@ -169,13 +170,16 @@ namespace WpfApplication1
                     var desc = r[(int)dtIndex["description"]];
 
                     TimeSpan diff = end_date-start_date;
+                    total = total + diff;
+                    
                     String diffTime = diff.Hours.ToString() + " Hrs " + diff.Minutes.ToString() + "Mins";
                     String readable = Ordinal(Convert.ToInt32(start_date.ToString("dd"))) + " " + start_date.ToString("dddd");
 
                     dt.Rows.Add(r,readable,start_date.ToString("dd"), start_date.ToString("h:mm tt") + " - " + end_date.ToString("h:mm tt"), diffTime, desc);
                 }
-                             
 
+                HrsLabel.Content = (total.Days * 24 + total.Hours) + "hrs " + total.Minutes + " mins = " + (total.TotalHours) + " hrs";
+                
                 DataView dvdt = dt.DefaultView;
                 dvdt.Sort = "Day ASC";
                 
@@ -402,6 +406,11 @@ namespace WpfApplication1
         }
 
         private void edit_button3_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
 
         }
